@@ -1,0 +1,8 @@
+{
+  "name": "characters-challenge",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/pilaas/characters-challenge",
+  "author": "Mariusz Pilarczy <pilaas@gmail.com>",
+  "license": "MIT"
+}
