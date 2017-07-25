@@ -14,11 +14,13 @@
   ],
   "plugins": [
     "react",
+    "jest",
   ],
   "env": {
     "node": true,
     "browser": true,
     "es6": true,
+    "jest/globals": true,
   },
   "rules": {
     "no-console": "off",
