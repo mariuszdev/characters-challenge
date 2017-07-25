@@ -1,5 +1,6 @@
 const {execSync, spawn} = require('child_process');
 const MongoClient = require('mongodb').MongoClient;
+const createRepository = require('../server/repository');
 
 let mongoProcess;
 let mongoClient;
@@ -49,8 +50,25 @@ afterAll((done) => {
     });
 });
 
-describe('Simple test', () => {
-  test('Hello', () => {
-    expect(true).toBe(true);
+describe('Creating single character', () => {
+  const repository = createRepository(mongoClient);
+  const validCharacter = {
+    'name': 'Luke Skywalker',
+    'height': 172,
+    'mass': 77,
+    'hair_color': 'blond',
+    'skin_color': 'fair',
+    'eye_color': 'blue',
+    'birth_year': '19BBY',
+    'is_male': true,
+  };
+
+  test('should successfully create character in database', () => {
+    expect.assertions(1);
+
+    return repository.createCharacter(validCharacter)
+      .then((characterId) => {
+        expect(typeof characterId).toBe('string');
+      });
   });
 });
