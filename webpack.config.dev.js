@@ -6,12 +6,16 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   devtool: 'cheap-eval-source-map',
   entry: [
+    'react-hot-loader/patch',
     'webpack-hot-middleware/client',
-    path.resolve(__dirname, 'src/app.jsx'),
+    path.resolve(__dirname, 'src/index.jsx'),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+  },
+  resolve: {
+    extensions: ['.js', '.json', '.jsx'],
   },
   module: {
     rules: [
@@ -63,4 +67,7 @@ module.exports = {
       path: path.resolve(__dirname, 'dist'),
     }),
   ],
+  devServer: {
+    hot: true,
+  },
 };

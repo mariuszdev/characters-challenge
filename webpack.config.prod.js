@@ -6,11 +6,14 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   devtool: 'source-map',
   entry: [
-    path.resolve(__dirname, 'src/app.jsx'),
+    path.resolve(__dirname, 'src/index.jsx'),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.[hash].js',
+  },
+  resolve: {
+    extensions: ['.js', '.json', '.jsx'],
   },
   module: {
     rules: [

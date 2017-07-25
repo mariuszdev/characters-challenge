@@ -1,9 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {Component} from 'react';
 
-import './style.sass';
+import A from './components/A';
 
-ReactDOM.render(
-  <h1>Hello world!</h1>,
-  document.getElementById('app'),
-);
+export default class App extends Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello world!</h1>
+        <A />
+      </div>
+    );
+  }
+}
