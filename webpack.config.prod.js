@@ -4,6 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
+  devtool: 'source-map',
   entry: [
     path.resolve(__dirname, 'src/app.js'),
   ],
@@ -17,10 +18,34 @@ module.exports = {
        test: /\.(sa|c)ss$/,
        use: ExtractTextPlugin.extract({
          fallback: 'style-loader',
-         use: ['css-loader?-autoprefixer', 'sass-loader'],
+         use: [
+           {
+             loader: 'css-loader',
+             options: {
+               sourceMap: true,
+               importLoaders: 2,
+               minimize: true,
+             },
+           },
+           {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              plugins: (loader) => [
+                require('autoprefixer')(),
+              ],
+            },
+           },
+           {
+             loader: 'sass-loader',
+             options: {
+               sourceMap: true,
+             },
+           },
+         ],
        }),
-     },
-   ],
+      },
+    ],
   },
   plugins: [
     new CleanWebpackPlugin([path.resolve(__dirname, 'dist')]),

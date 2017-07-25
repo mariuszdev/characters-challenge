@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const nunjucks = require('nunjucks');
+const compression = require('compression');
 
 const app = express();
 
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const assets = require('../dist/webpack-assets.json');
 
+app.use(compression());
 app.use(express.static(path.join(__dirname, '../dist')));
 
 app.get('*', (req, res) => {

@@ -4,6 +4,7 @@ const AssetsPlugin = require('assets-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
+  devtool: 'cheap-eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
     path.resolve(__dirname, 'src/app.js'),
@@ -16,13 +17,33 @@ module.exports = {
     rules: [
       {
        test: /\.(sa|c)ss$/,
-       use: [{
-          loader: 'style-loader',
-        }, {
-          loader: 'css-loader?-autoprefixer',
-        }, {
-          loader: 'sass-loader',
-        }],
+       use: [
+         {
+           loader: 'style-loader',
+         },
+         {
+           loader: 'css-loader',
+           options: {
+             sourceMap: true,
+             importLoaders: 2,
+           },
+         },
+         {
+          loader: 'postcss-loader',
+          options: {
+            sourceMap: true,
+            plugins: (loader) => [
+              require('autoprefixer')(),
+            ],
+          },
+         },
+         {
+           loader: 'sass-loader',
+           options: {
+             sourceMap: true,
+           },
+         },
+       ],
      },
    ],
   },
