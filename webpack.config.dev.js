@@ -7,7 +7,7 @@ module.exports = {
   devtool: 'cheap-eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
-    path.resolve(__dirname, 'src/app.js'),
+    path.resolve(__dirname, 'src/app.jsx'),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -15,6 +15,13 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
       {
        test: /\.(sa|c)ss$/,
        use: [

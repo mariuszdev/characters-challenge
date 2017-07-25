@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   devtool: 'source-map',
   entry: [
-    path.resolve(__dirname, 'src/app.js'),
+    path.resolve(__dirname, 'src/app.jsx'),
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -14,6 +14,13 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
       {
        test: /\.(sa|c)ss$/,
        use: ExtractTextPlugin.extract({
