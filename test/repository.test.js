@@ -1,12 +1,26 @@
 const {execSync, spawn} = require('child_process');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
+
 const createRepository = require('../server/repository');
 
 let mongoProcess;
 let mongoClient;
+let repository;
 
 const mongoPort = '27018';
 const mongoUrl = `mongodb://localhost:${mongoPort}/characters-challenge-test`;
+
+const validCharacter = {
+  'name': 'Luke Skywalker',
+  'height': 172,
+  'mass': 77,
+  'hair_color': 'blond',
+  'skin_color': 'fair',
+  'eye_color': 'blue',
+  'birth_year': '19BBY',
+  'is_male': true,
+};
 
 const createMongoReadyListener = (onReady) => (data) => {
   if (data.toString().indexOf('waiting for connections') >= 0) {
@@ -35,6 +49,7 @@ beforeAll(() => {
       connectMongo()
         .then((db) => {
           mongoClient = db;
+          repository = createRepository(db);
         })
         .then(resolve);
     });
@@ -52,24 +67,7 @@ afterAll((done) => {
     });
 });
 
-
 describe('Creating single character', () => {
-  let repository;
-  const validCharacter = {
-    'name': 'Luke Skywalker',
-    'height': 172,
-    'mass': 77,
-    'hair_color': 'blond',
-    'skin_color': 'fair',
-    'eye_color': 'blue',
-    'birth_year': '19BBY',
-    'is_male': true,
-  };
-
-  beforeAll(() => {
-    repository = createRepository(mongoClient);
-  });
-
   test('should successfully create character in database', () => {
     expect.assertions(1);
 
@@ -79,7 +77,7 @@ describe('Creating single character', () => {
       });
   });
 
-  test('should throw error when invalid character data passed', () => {
+  test('should reject when invalid character data passed', () => {
     expect.assertions(1);
 
     const invalidCharacter = Object.assign({}, validCharacter, {
@@ -91,5 +89,36 @@ describe('Creating single character', () => {
       .toMatchObject(expect.objectContaining({
         name: expect.arrayContaining(['Name length should be between 2 and 20 including']),
       }));
+  });
+});
+
+describe('Delete single character', () => {
+  let characterId;
+
+  beforeEach(() => {
+    return repository.createCharacter(validCharacter)
+      .then((_characterId) => {
+        characterId = _characterId;
+      });
+  });
+
+  afterEach(() => {
+    return mongoClient.collection('characters').deleteOne({
+      '_id': new ObjectID(characterId),
+    });
+  });
+
+  test('should successfully delete character from database', () => {
+    expect.assertions(1);
+
+    return expect(repository.deleteCharacter(characterId)).resolves.toBeNull();
+  });
+
+  test('should reject when character not exist', () => {
+    expect.assertions(1);
+
+    return expect(repository.deleteCharacter(new ObjectID())).rejects.toMatchObject({
+      error: 'Character not exist.',
+    });
   });
 });

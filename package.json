@@ -20,7 +20,7 @@
     "server": "NODE_ENV=production node ./server/index.js",
     "compile-front-prod": "webpack -p --config webpack.config.prod.js",
     "compile-front-dev": "webpack --config webpack.config.dev.js",
-    "eslint": "eslint src/**/*.jsx src/**/*.js server/**/*.js test/**/*.js",
+    "eslint": "eslint ./src ./server ./test --ext .jsx --ext .js",
     "test": "jest ./test"
   },
   "devDependencies": {
