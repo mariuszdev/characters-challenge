@@ -1,7 +1,7 @@
 const {execSync, spawn} = require('child_process');
-const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 
+const connectMongo = require('../server/utils/connectMongo');
 const createRepository = require('../server/repository');
 
 let mongoProcess;
@@ -28,16 +28,6 @@ const createMongoReadyListener = (onReady) => (data) => {
   }
 };
 
-const connectMongo = () => new Promise((resolve, reject) => {
-  MongoClient.connect(mongoUrl, (err, db) => {
-    if (err !== null) {
-      return reject(err);
-    }
-
-    resolve(db);
-  });
-});
-
 beforeAll(() => {
   return new Promise((resolve) => {
     execSync('mkdir -p ./mongo-test');
@@ -46,7 +36,7 @@ beforeAll(() => {
     const mongoReadyListener = createMongoReadyListener(() => {
       mongoProcess.stdout.removeListener('data', mongoReadyListener);
 
-      connectMongo()
+      connectMongo(mongoUrl)
         .then((db) => {
           mongoClient = db;
           repository = createRepository(db);

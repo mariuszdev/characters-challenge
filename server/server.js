@@ -2,6 +2,9 @@ const path = require('path');
 const express = require('express');
 const nunjucks = require('nunjucks');
 const compression = require('compression');
+const configureRoutes = require('./routes');
+const createRepository = require('./repository');
+const connectMongo = require('./utils/connectMongo');
 
 const app = express();
 
@@ -26,18 +29,20 @@ const assets = require('../dist/webpack-assets.json');
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../dist')));
 
-/*
-  createMongoClient
+const mongoUrl = process.env.MONGODB_URL ||
+  `mongodb://localhost:27017/characters-challenge`;
 
-  createRepository
+connectMongo(mongoUrl)
+  .then((mongoClient) => {
+    const repository = createRepository(mongoClient);
 
-  configureRoutes(repository)
-*/
+    configureRoutes(app, repository);
 
-app.get('*', (req, res) => {
-  res.render('index.html', {
-    assets: assets.main,
+    app.get('*', (req, res) => {
+      res.render('index.html', {
+        assets: assets.main,
+      });
+    });
   });
-});
 
 module.exports = app;
