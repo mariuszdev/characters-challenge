@@ -20,6 +20,7 @@
     "compile-front-prod": "webpack -p --config webpack.config.prod.js",
     "compile-front-dev": "webpack --config webpack.config.dev.js",
     "eslint": "eslint ./src ./server ./test --ext .jsx --ext .js",
+    "load-initial-data": "cd ./server/scripts && node loadInitialData.js",
     "test": "jest ./test"
   },
   "devDependencies": {

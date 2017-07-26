@@ -26,6 +26,14 @@ const assets = require('../dist/webpack-assets.json');
 app.use(compression());
 app.use(express.static(path.join(__dirname, '../dist')));
 
+/*
+  createMongoClient
+
+  createRepository
+
+  configureRoutes(repository)
+*/
+
 app.get('*', (req, res) => {
   res.render('index.html', {
     assets: assets.main,

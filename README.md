@@ -19,10 +19,19 @@ This will install all required libraries.
 Running
 ---
 
-Compile:
+1. Compile:
 `yarn run compile-front-prod`
 
-Run:
+1. Create mongodb database:
+`mkdir mongodb`
+
+1. Run mongod:
+`mongod --dbpath ./mongodb`
+
+1. Load initial data:
+`yarn run load-initial-data`
+
+1. Run:
 `yarn run server`
 
 Development

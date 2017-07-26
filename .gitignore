@@ -1,4 +1,5 @@
 node_modules
 dist
+mongodb
 
 yarn-error.log
