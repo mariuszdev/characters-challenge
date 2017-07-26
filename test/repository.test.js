@@ -24,34 +24,37 @@ const connectMongo = () => new Promise((resolve, reject) => {
   });
 });
 
-beforeAll((done) => {
-  execSync('mkdir -p ./mongo-test');
-  mongoProcess = spawn('mongod', ['--dbpath', 'mongo-test', '--port', mongoPort]);
+beforeAll(() => {
+  return new Promise((resolve) => {
+    execSync('mkdir -p ./mongo-test');
+    mongoProcess = spawn('mongod', ['--dbpath', 'mongo-test', '--port', mongoPort]);
 
-  const mongoReadyListener = createMongoReadyListener(() => {
-    mongoProcess.stdout.removeListener('data', mongoReadyListener);
+    const mongoReadyListener = createMongoReadyListener(() => {
+      mongoProcess.stdout.removeListener('data', mongoReadyListener);
 
-    connectMongo()
-      .then((db) => {
-        mongoClient = db;
-      })
-      .then(done);
+      connectMongo()
+        .then((db) => {
+          mongoClient = db;
+        })
+        .then(resolve);
+    });
+
+    mongoProcess.stdout.on('data', mongoReadyListener);
   });
-
-  mongoProcess.stdout.on('data', mongoReadyListener);
 });
 
 afterAll((done) => {
   mongoClient.close()
     .then(() => {
       mongoProcess.kill();
-      execSync('rm -rf ./mongo-test');
+      execSync('rm -rf mongo-test');
       done();
     });
 });
 
+
 describe('Creating single character', () => {
-  const repository = createRepository(mongoClient);
+  let repository;
   const validCharacter = {
     'name': 'Luke Skywalker',
     'height': 172,
@@ -63,6 +66,10 @@ describe('Creating single character', () => {
     'is_male': true,
   };
 
+  beforeAll(() => {
+    repository = createRepository(mongoClient);
+  });
+
   test('should successfully create character in database', () => {
     expect.assertions(1);
 
@@ -70,5 +77,19 @@ describe('Creating single character', () => {
       .then((characterId) => {
         expect(typeof characterId).toBe('string');
       });
+  });
+
+  test('should throw error when invalid character data passed', () => {
+    expect.assertions(1);
+
+    const invalidCharacter = Object.assign({}, validCharacter, {
+      name: 'A',
+    });
+
+    return expect(repository.createCharacter(invalidCharacter))
+      .rejects
+      .toMatchObject(expect.objectContaining({
+        name: expect.arrayContaining(['Name length should be between 2 and 20 including']),
+      }));
   });
 });
