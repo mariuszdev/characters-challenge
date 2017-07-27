@@ -6,6 +6,7 @@ class MongoRepository {
   constructor(mongoClient) {
     this.mongoClient = mongoClient;
     this.charactersCollection = this.mongoClient.collection('characters');
+    this.usersCollection = this.mongoClient.collection('users');
   }
 
   _findCharacter(characterId) {
@@ -33,13 +34,20 @@ class MongoRepository {
     return this.charactersCollection.deleteOne({
       '_id': new mongodb.ObjectID(characterId),
     }).then(({deletedCount}) => {
-      if (deletedCount === 1) {
-        return null;
+      if (deletedCount === 0) {
+        return Promise.reject({
+          error: 'Character not exist.',
+        });
       }
+    }).then(() => {
+      return this.usersCollection.find().toArray()
+        .then((users) => {
+          const removeFromFavouritePromises = users
+            .filter(({favouriteCharacters}) => favouriteCharacters.indexOf(characterId) >= 0)
+            .map(({_id}) => this.removeFavouriteCharacter(_id, characterId));
 
-      return Promise.reject({
-        error: 'Character not exist.',
-      });
+          return Promise.all(removeFromFavouritePromises).then(() => null);
+        });
     });
   }
 
@@ -67,6 +75,79 @@ class MongoRepository {
 
   getAllCharacters() {
     return this.charactersCollection.find().toArray();
+  }
+
+  getFavouriteCharactersIds(userId) {
+    return this.usersCollection.findOne({
+      '_id': userId,
+    }, {
+      'favouriteCharacters': true,
+    }).then((user) => {
+      if (user) {
+        return user.favouriteCharacters;
+      }
+
+      return Promise.reject({
+        error: 'User not exist.',
+      });
+    });
+  }
+
+  addFavouriteCharacter(userId, characterId) {
+    return this.getAllCharacters()
+      .then((characters) => {
+        if (characters.map((character) => character._id.toString()).indexOf(characterId) === -1) {
+          return Promise.reject({
+            error: 'Character not exist.',
+          });
+        }
+      })
+      .then(() => this.getFavouriteCharactersIds(userId))
+      .then((favouriteCharacters) => {
+        if (favouriteCharacters.indexOf(characterId) >= 0) {
+          return Promise.reject({
+            error: 'Character already favourite.',
+          });
+        }
+
+        return favouriteCharacters;
+      })
+      .then((favouriteCharacters) => (
+        this.usersCollection.updateOne({
+          '_id': userId,
+        }, {
+          $set: {
+            favouriteCharacters: [...favouriteCharacters, characterId],
+          },
+        })
+      ));
+  }
+
+  removeFavouriteCharacter(userId, characterId) {
+    return this.getFavouriteCharactersIds(userId)
+      .then((favouriteCharacters) => {
+        if (favouriteCharacters.indexOf(characterId) === -1) {
+          return Promise.reject({
+            error: 'Character is not favourite.',
+          });
+        }
+
+        return favouriteCharacters;
+      })
+      .then((favouriteCharacters) => {
+        const removedCharacterIndex = favouriteCharacters.indexOf(characterId);
+        const favouriteCharactersWithoutRemoved = [...favouriteCharacters];
+
+        favouriteCharactersWithoutRemoved.splice(removedCharacterIndex, 1);
+
+        return this.usersCollection.updateOne({
+          '_id': userId,
+        }, {
+          $set: {
+            favouriteCharacters: favouriteCharactersWithoutRemoved,
+          },
+        });
+      });
   }
 }
 
