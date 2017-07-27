@@ -1,5 +1,7 @@
 const bodyParser = require('body-parser');
 
+const USER_ID = '123456789000';
+
 module.exports = function configureRoutes(app, repository) {
   app.use(bodyParser.json());
 
@@ -30,6 +32,26 @@ module.exports = function configureRoutes(app, repository) {
     const characterData = req.body;
 
     repository.editCharacter(req.params.id, characterData)
+      .then((id) => res.sendStatus(204))
+      .catch((error) => res.status(400).json(error));
+  });
+
+  app.post('/favourites/:id', (req, res) => {
+    repository.addFavouriteCharacter(USER_ID, req.params.id)
+      .then((id) => res.sendStatus(204))
+      .catch((error) => res.status(400).json(error));
+  });
+
+  app.get('/favourites', (req, res) => {
+    repository.getFavouriteCharactersIds(USER_ID)
+      .then((favouritesIds) => res.status(200).json({
+        favourites: favouritesIds,
+      }))
+      .catch(() => res.sendStatus(500));
+  });
+
+  app.delete('/favourites/:id', (req, res) => {
+    repository.removeFavouriteCharacter(USER_ID, req.params.id)
       .then((id) => res.sendStatus(204))
       .catch((error) => res.status(400).json(error));
   });
