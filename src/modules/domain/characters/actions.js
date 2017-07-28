@@ -4,6 +4,7 @@ export const SET_CHARACTERS = 'SET_CHARACTERS';
 export const SET_CHARACTER_PENDING = 'SET_CHARACTER_PENDING';
 export const UNSET_CHARACTER_PENDING = 'UNSET_CHARACTER_PENDING';
 export const REMOVE_CHARACTER_SUCCEED = 'REMOVE_CHARACTER_SUCCEED';
+export const CREATE_CHARACTER = 'CREATE_CHARACTER';
 
 const setCharacters = (characters) => ({
   type: SET_CHARACTERS,
@@ -23,6 +24,11 @@ export const unsetCharacterPending = (characterId) => ({
 export const removeCharacterSucceed = (characterId) => ({
   type: REMOVE_CHARACTER_SUCCEED,
   payload: characterId,
+});
+
+export const createCharacter = (data) => ({
+  type: CREATE_CHARACTER,
+  payload: data,
 });
 
 export const fetchCharacters = () => (dispatch, getState) => {

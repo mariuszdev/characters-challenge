@@ -9,4 +9,9 @@ export default {
   removeCharacter: (characterId) => (
     axios.delete(`${apiUrl}/characters/${characterId}`)
   ),
+  createCharacter: (data) => (
+    axios.post(`${apiUrl}/characters`, data)
+      .then((response) => response.data.id)
+      .catch((error) => Promise.reject(error.response.data))
+  ),
 };

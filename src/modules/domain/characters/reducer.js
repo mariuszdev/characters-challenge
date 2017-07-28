@@ -5,6 +5,7 @@ import {
   SET_CHARACTER_PENDING,
   UNSET_CHARACTER_PENDING,
   REMOVE_CHARACTER_SUCCEED,
+  CREATE_CHARACTER,
 } from './actions';
 
 const initialState = {
@@ -31,6 +32,10 @@ export default function characters(state = initialState, action) {
     case UNSET_CHARACTER_PENDING:
       return Object.assign({}, state, {
         pending: without(state.pending, action.payload),
+      });
+    case CREATE_CHARACTER:
+      return Object.assign({}, state, {
+        list: state.list.concat(action.payload),
       });
     default:
       return state;
