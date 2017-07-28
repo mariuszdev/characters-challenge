@@ -7,7 +7,7 @@ const CharactersList = ({characters}) => {
   return (
     <div className="characters-list">
       {characters.map((character) => (
-        <CharactersListItem key={character._id} {...character} />
+        <CharactersListItem key={character._id} character={character} />
       ))}
     </div>
   );

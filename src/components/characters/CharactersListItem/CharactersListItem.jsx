@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CharactersListItem = ({name}) => {
+const CharactersListItem = ({character: {name}, pending, onRemoveClick}) => {
   return (
     <div className="characters-list-item">
-      {name}
+      {name} <button type="button" disabled={pending} onClick={onRemoveClick}>Remove</button>
     </div>
   );
 };
 
 CharactersListItem.propTypes = {
-  name: PropTypes.string,
+  character: PropTypes.object,
+  onRemoveClick: PropTypes.func,
+  pending: PropTypes.bool,
 };
 
 export default CharactersListItem;
