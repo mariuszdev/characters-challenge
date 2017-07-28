@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import Modal from 'react-modal';
 import PropTypes from 'prop-types';
+import {omit} from 'lodash';
 
 import {isModalOpen, closeModal} from '../modules/ui/app';
 
@@ -10,6 +11,9 @@ const PlainModal = ({isOpen, closeModal, children}) => (
     isOpen={isOpen}
     onRequestClose={closeModal}
     contentLabel=""
+    defaultStyles={{
+      overlay: omit(Modal.defaultStyles.overlay, ['backgroundColor']),
+    }}
   >
     {children}
   </Modal>

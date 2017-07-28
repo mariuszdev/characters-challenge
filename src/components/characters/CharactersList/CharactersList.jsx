@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import {withHandlers} from 'recompose';
 
 import CharactersListItem from '../../../containers/CharactersListItem';
+import NewCharacterFormModal from '../../../containers/NewCharacterFormModal';
+import NewCharacterForm from '../../../containers/NewCharacterForm';
 
 const enhance = withHandlers({
   onSearch: ({onSearch}) => (e) => onSearch(e.target.value),
@@ -20,6 +22,9 @@ const CharactersList = ({characters, searchQuery, onSearch, openNewCharacterForm
           <CharactersListItem key={character._id} character={character} />
         ))}
       </div>
+      <NewCharacterFormModal>
+        <NewCharacterForm />
+      </NewCharacterFormModal>
     </div>
   );
 };
