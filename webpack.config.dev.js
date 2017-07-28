@@ -20,6 +20,18 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.svg$/,
+        use: {
+          loader: 'svg-inline-loader',
+        },
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        use: {
+          loader: 'file-loader?name=public/fonts/[name].[ext]',
+        },
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
