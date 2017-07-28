@@ -8,9 +8,10 @@ const enhance = withHandlers({
   onSearch: ({onSearch}) => (e) => onSearch(e.target.value),
 });
 
-const CharactersList = ({characters, searchQuery, onSearch}) => {
+const CharactersList = ({characters, searchQuery, onSearch, openNewCharacterForm}) => {
   return (
     <div className="characters">
+      <button type="button" className="characters--add-new" onClick={openNewCharacterForm}>Add new</button>
       <div className="characters--search">
         <input type="text" onChange={onSearch} value={searchQuery} />
       </div>
@@ -27,6 +28,7 @@ CharactersList.propTypes = {
   characters: PropTypes.array,
   onSearch: PropTypes.func,
   searchQuery: PropTypes.string,
+  openNewCharacterForm: PropTypes.func,
 };
 
 export default enhance(CharactersList);
