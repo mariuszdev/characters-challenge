@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import CharactersList from '../containers/CharactersList';
+
 class App extends Component {
   componentDidMount() {
     this.props.onMount();
@@ -9,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        Hello world
+        <CharactersList />
       </div>
     );
   }
