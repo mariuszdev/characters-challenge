@@ -1,10 +1,11 @@
 import {APP_BOOTED} from '../../ui/app';
+import {fetchUser} from './actions';
 
-export default ({getState}) => (next) => (action) => {
+export default ({getState, dispatch}) => (next) => (action) => {
   const returnValue = next(action);
 
   if (action.type === APP_BOOTED) {
-    console.log('fetch favourites');
+    dispatch(fetchUser());
   }
 
   return returnValue;

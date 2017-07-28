@@ -10,7 +10,7 @@ const setCharacters = (characters) => ({
   payload: characters,
 });
 
-const setCharacterPending = (characterId) => ({
+export const setCharacterPending = (characterId) => ({
   type: SET_CHARACTER_PENDING,
   payload: characterId,
 });
