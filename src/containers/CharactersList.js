@@ -1,10 +1,16 @@
 import {connect} from 'react-redux';
 
 import CharactersList from '../components/characters/CharactersList';
-import {getCharacters} from '../modules/domain/characters';
+import {getCharactersSearched} from '../modules/domain/characters';
+import {getSearchQuery, searchCharacters} from '../modules/ui/characters';
 
 const mapStateToProps = (state) => ({
-  characters: getCharacters(state),
+  characters: getCharactersSearched(state),
+  searchQuery: getSearchQuery(state),
 });
 
-export default connect(mapStateToProps)(CharactersList);
+const mapDispatchToProps = {
+  onSearch: searchCharacters,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CharactersList);
