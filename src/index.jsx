@@ -3,13 +3,11 @@ import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 import {Provider} from 'react-redux';
 
-import createStore from './store/createStore';
+import store from './store';
 
 import App from './containers/App';
 
 import './style.sass';
-
-const store = createStore();
 
 const render = (Component) => {
   ReactDOM.render(

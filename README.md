@@ -47,3 +47,14 @@ Testing
 ---
 
 `yarn run test`
+
+Future improvements
+---
+
+- LRU Cache where appropriate.
+- Use of Flow.js
+- Server side rendering
+- Frontend routing (URL for forms)
+- Characters pagination
+- JSDoc
+- Frontend tests

@@ -7,7 +7,7 @@ import reducer from './reducer';
 import {middleware as charactersMiddleware} from '../modules/domain/characters';
 import {middleware as userMiddleware} from '../modules/domain/user';
 
-export default () => createStore(
+export default createStore(
   reducer,
   applyMiddleware(
     thunk,
