@@ -1,4 +1,4 @@
-import {getFormValues, stopSubmit} from 'redux-form';
+import {getFormValues, stopSubmit, startSubmit} from 'redux-form';
 
 import {
   openModal,
@@ -8,7 +8,13 @@ import {
   EDIT_CHARACTER_FORM_MODAL,
   EDIT_CHARACTER_FORM,
 } from '../app';
-import {repository, createCharacter, updateCharacter} from '../../domain/characters';
+import {
+  repository,
+  createCharacter,
+  updateCharacter,
+  setCharacterPending,
+  unsetCharacterPending,
+} from '../../domain/characters';
 import {transformFormData} from './utils';
 
 export const SEARCH_CHARACTERS = 'SEARCH_CHARACTERS';
@@ -46,6 +52,8 @@ export const handleNewCharacterFormSubmit = (data) => (dispatch, getState) => {
   const data = getFormValues(NEW_CHARACTER_FORM)(getState());
   const dataTransformed = transformFormData(data);
 
+  dispatch(startSubmit(NEW_CHARACTER_FORM));
+
   repository.createCharacter(dataTransformed)
     .then((_id) => {
       dispatch(closeModal(NEW_CHARACTER_FORM_MODAL));
@@ -62,6 +70,9 @@ export const handleEditCharacterFormSubmit = () => (dispatch, getState) => {
   const {_id, ...data} = getFormValues(EDIT_CHARACTER_FORM)(getState());
   const dataTransformed = transformFormData(data);
 
+  dispatch(startSubmit(EDIT_CHARACTER_FORM));
+  dispatch(setCharacterPending(_id));
+
   repository.editCharacter(_id, dataTransformed)
     .then(() => {
       dispatch(closeModal(EDIT_CHARACTER_FORM_MODAL));
@@ -72,5 +83,6 @@ export const handleEditCharacterFormSubmit = () => (dispatch, getState) => {
         _id,
       }));
     })
-    .catch((errors) => dispatch(stopSubmit(EDIT_CHARACTER_FORM, errors)));
+    .catch((errors) => dispatch(stopSubmit(EDIT_CHARACTER_FORM, errors)))
+    .then(() => dispatch(unsetCharacterPending(_id)));
 };

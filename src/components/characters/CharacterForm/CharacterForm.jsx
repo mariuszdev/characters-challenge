@@ -47,7 +47,7 @@ const enhance = withHandlers({
   },
 });
 
-const CharacterForm = ({handleSubmit}) => (
+const CharacterForm = ({handleSubmit, submitting}) => (
   <form className="character-form" onSubmit={handleSubmit}>
     <div className="row">
       <div className="col-xs-4">
@@ -138,12 +138,13 @@ const CharacterForm = ({handleSubmit}) => (
         />
       </div>
     </div>
-    <button type="submit" className="btn btn-success character-form--btn-submit">Save</button>
+    <button type="submit" disabled={submitting} className="btn btn-success character-form--btn-submit">Save</button>
   </form>
 );
 
 CharacterForm.propTypes = {
   handleSubmit: PropTypes.func,
+  submitting: PropTypes.bool,
 };
 
 export default enhance(CharacterForm);
