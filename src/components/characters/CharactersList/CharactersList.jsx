@@ -8,6 +8,8 @@ import NewCharacterForm from '../../../containers/NewCharacterForm';
 import EditCharacterFormModal from '../../../containers/EditCharacterFormModal';
 import EditCharacterForm from '../../../containers/EditCharacterForm';
 
+import './style.sass';
+
 const enhance = withHandlers({
   onSearch: ({onSearch}) => (e) => onSearch(e.target.value),
 });
@@ -15,13 +17,28 @@ const enhance = withHandlers({
 const CharactersList = ({characters, searchQuery, onSearch, openNewCharacterForm}) => {
   return (
     <div className="characters">
-      <button type="button" className="characters--add-new" onClick={openNewCharacterForm}>Add new</button>
-      <div className="characters--search">
-        <input type="text" onChange={onSearch} value={searchQuery} />
+      <h1>Star Wars Characters</h1>
+      <div className="character__header">
+        <div className="characters__search">
+          <input
+            className="form-control"
+            type="text"
+            onChange={onSearch}
+            value={searchQuery}
+            placeholder="Search characters"
+          />
+        </div>
+        <button
+          type="button"
+          className="btn btn-success characters__add-new"
+          onClick={openNewCharacterForm}
+        >
+          Add new <span className="glyphicon glyphicon-plus" />
+        </button>
       </div>
-      <div className="characters--list">
+      <div className="characters__list list-group">
         {characters.map((character) => (
-          <CharactersListItem key={character._id} character={character} />
+          <CharactersListItem key={character._id} character={character} className="list-group-item" />
         ))}
       </div>
       <NewCharacterFormModal>

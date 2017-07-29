@@ -23,6 +23,7 @@
     "jest/globals": true,
   },
   "rules": {
+    "camelcase": "off",
     "no-console": "off",
     "require-jsdoc": "off",
     "max-len": ["error", 120],
