@@ -8,6 +8,9 @@ const defaultList = [];
 export const getCharacters = (state) =>
   get(state, ['domain', 'characters', 'list'], defaultList);
 
+export const getCharacter = (state, id) =>
+  getCharacters(state).find(({_id}) => _id === id);
+
 export const getCharactersSearched = createSelector(getCharacters, getSearchQuery, (characters, searchQuery = '') => {
   const searchQueryNormalized = searchQuery.trim().toLowerCase();
 

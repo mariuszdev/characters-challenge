@@ -5,9 +5,6 @@ import {NEW_CHARACTER_FORM} from '../modules/ui/app';
 import {handleNewCharacterFormSubmit} from '../modules/ui/characters';
 import PlainCharacterForm from '../components/characters/CharacterForm';
 
-const mapStateToProps = (state) => ({
-});
-
 const mapDispatchToProps = {
   handleSubmit: handleNewCharacterFormSubmit,
 };
@@ -20,4 +17,4 @@ const CharacterForm = reduxForm({
   },
 })(PlainCharacterForm);
 
-export default connect(mapStateToProps, mapDispatchToProps)(CharacterForm);
+export default connect(null, mapDispatchToProps)(CharacterForm);

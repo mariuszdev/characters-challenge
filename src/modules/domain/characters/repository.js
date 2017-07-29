@@ -14,4 +14,8 @@ export default {
       .then((response) => response.data.id)
       .catch((error) => Promise.reject(error.response.data))
   ),
+  editCharacter: (characterId, data) => (
+    axios.put(`${apiUrl}/characters/${characterId}`, data)
+      .catch((error) => Promise.reject(error.response.data))
+  ),
 };

@@ -6,12 +6,24 @@ import {
   UNSET_CHARACTER_PENDING,
   REMOVE_CHARACTER_SUCCEED,
   CREATE_CHARACTER,
+  UPDATE_CHARACTER,
 } from './actions';
 
 const initialState = {
   fetched: true,
   pending: [],
   list: [],
+};
+
+const updateCharacter = (state, action) => {
+  const list = [...state.list];
+  const index = list.findIndex(({_id}) => _id === action.payload._id);
+
+  list.splice(index, 1, {...action.payload});
+
+  return Object.assign({}, state, {
+    list,
+  });
 };
 
 export default function characters(state = initialState, action) {
@@ -37,6 +49,8 @@ export default function characters(state = initialState, action) {
       return Object.assign({}, state, {
         list: state.list.concat(action.payload),
       });
+    case UPDATE_CHARACTER:
+      return updateCharacter(state, action);
     default:
       return state;
   }

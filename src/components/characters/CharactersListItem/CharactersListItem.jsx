@@ -6,11 +6,13 @@ const CharactersListItem = ({
   pending,
   favourite,
   onRemoveClick,
+  onEditClick,
   onToggleFavourite,
 }) => {
   return (
     <div className="characters-list-item">
       {name}
+      <button type="button" disabled={pending} onClick={onEditClick}>Edit</button>
       <button type="button" disabled={pending} onClick={onRemoveClick}>Remove</button>
       <button
         type="button"
@@ -26,6 +28,7 @@ const CharactersListItem = ({
 CharactersListItem.propTypes = {
   character: PropTypes.object,
   onRemoveClick: PropTypes.func,
+  onEditClick: PropTypes.func,
   pending: PropTypes.bool,
   favourite: PropTypes.bool,
   onToggleFavourite: PropTypes.func,

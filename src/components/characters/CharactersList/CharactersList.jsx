@@ -5,6 +5,8 @@ import {withHandlers} from 'recompose';
 import CharactersListItem from '../../../containers/CharactersListItem';
 import NewCharacterFormModal from '../../../containers/NewCharacterFormModal';
 import NewCharacterForm from '../../../containers/NewCharacterForm';
+import EditCharacterFormModal from '../../../containers/EditCharacterFormModal';
+import EditCharacterForm from '../../../containers/EditCharacterForm';
 
 const enhance = withHandlers({
   onSearch: ({onSearch}) => (e) => onSearch(e.target.value),
@@ -25,6 +27,9 @@ const CharactersList = ({characters, searchQuery, onSearch, openNewCharacterForm
       <NewCharacterFormModal>
         <NewCharacterForm />
       </NewCharacterFormModal>
+      <EditCharacterFormModal>
+        <EditCharacterForm />
+      </EditCharacterFormModal>
     </div>
   );
 };
