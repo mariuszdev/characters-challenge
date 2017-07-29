@@ -19,12 +19,14 @@ module.exports = {
     rules: [
       {
         test: /\.svg$/,
+        exclude: /node_modules/,
         use: {
-          loader: 'svg-inline-loader',
+          loader: 'svg-sprite-loader',
         },
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
+        exclude: /src/,
         use: {
           loader: 'file-loader?name=public/fonts/[name].[ext]',
         },

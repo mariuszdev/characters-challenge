@@ -10,7 +10,7 @@ import {
 } from './actions';
 
 const initialState = {
-  fetched: true,
+  fetched: false,
   pending: [],
   list: [],
 };
@@ -30,7 +30,7 @@ export default function characters(state = initialState, action) {
   switch (action.type) {
     case SET_CHARACTERS:
       return Object.assign({}, state, {
-        fetched: false,
+        fetched: true,
         list: [...action.payload],
       });
     case REMOVE_CHARACTER_SUCCEED:

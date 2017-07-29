@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withHandlers} from 'recompose';
+import {branch, renderComponent, withHandlers} from 'recompose';
 
 import CharactersListItem from '../../../containers/CharactersListItem';
 import NewCharacterFormModal from '../../../containers/NewCharacterFormModal';
 import NewCharacterForm from '../../../containers/NewCharacterForm';
 import EditCharacterFormModal from '../../../containers/EditCharacterFormModal';
 import EditCharacterForm from '../../../containers/EditCharacterForm';
+import Loader from '../CharactersLoader';
 
 import './style.sass';
 
-const enhance = withHandlers({
-  onSearch: ({onSearch}) => (e) => onSearch(e.target.value),
-});
+const enhance = branch(
+  ({isFetched}) => !isFetched,
+  renderComponent(Loader),
+  withHandlers({
+    onSearch: ({onSearch}) => (e) => onSearch(e.target.value),
+  })
+);
 
 const CharactersList = ({characters, searchQuery, onSearch, openNewCharacterForm}) => {
   return (

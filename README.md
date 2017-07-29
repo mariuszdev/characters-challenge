@@ -32,7 +32,8 @@ Running
 `yarn run load-initial-data`
 
 1. Run:
-`yarn run server`
+  - `yarn run server`
+  - with API throttling `API_THROTTLE=2000 yarn run server`
 
 Development
 ---

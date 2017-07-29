@@ -8,6 +8,8 @@ const connectMongo = require('./utils/connectMongo');
 
 const app = express();
 
+app.set('API_THROTTLE', process.env.API_THROTTLE || 0);
+
 nunjucks.configure(path.resolve(__dirname, 'templates'), {
   express: app,
 });
@@ -38,7 +40,7 @@ connectMongo(mongoUrl)
 
     configureRoutes(app, repository);
 
-    app.get('*', (req, res) => {
+    app.get('/', (req, res) => {
       res.render('index.html', {
         assets: assets.main,
       });
